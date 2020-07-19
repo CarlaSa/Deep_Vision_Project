@@ -121,7 +121,6 @@ class CGAN:
                 gen_loss_list[epoch].append(gen_loss)
                 disc_loss_real_list[epoch].append(disc_loss_real)
                 disc_loss_fake_list[epoch].append(disc_loss_fake)
-                break
             
             
             if epoch % feedback_freq == 0 or epoch == num_epochs - 1 : 
