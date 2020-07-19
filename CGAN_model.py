@@ -67,7 +67,10 @@ class CGAN:
         # train with true pictures --------------
 
         output = self.Discriminator(images, categories)    
-        label = torch.full(size = (self.Batch_size,1), fill_value = self.real_label * (1- self.smoothness))
+        label = torch.full(size = (self.Batch_size, 1), fill_value = self.real_label * (1- self.smoothness))
+        print(self.Batch_size)
+        print(label.shape)
+        print(output.shape)
         if self.use_cuda:
             label = label.cuda()
         disc_loss_real = self.loss(output, label)
