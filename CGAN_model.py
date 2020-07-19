@@ -45,7 +45,7 @@ class CGAN:
 
         self.opt_gen = torch.optim.Adam(self.Generator.parameters(), \
                 lr = lr, betas = (0.5, 0.999))
-        self.opt_disc =torch.optim.Adam(self.Generator.parameters(), \
+        self.opt_disc =torch.optim.Adam(self.Discriminator.parameters(), \
                 lr = lr, betas = (0.5, 0.999))
         self.loss = torch.nn.BCELoss()
 
@@ -100,7 +100,6 @@ class CGAN:
         if self.use_cuda:
             label = label.cuda()
         disc_loss_false = self.loss(output, label)
-        
         disc_loss = 0.5 * (disc_loss_false + disc_loss_real)
         disc_loss.backward()
         self.opt_disc.step()
