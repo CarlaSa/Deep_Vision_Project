@@ -62,6 +62,24 @@ class CGAN:
             images = images.cuda()
             categories = categories.cuda()
 
+        #### train Generator ---------------------------------------
+        self.opt_gen.zero_grad()
+        #inp = self.Generator(noise, gen_categories)
+        noise = torch.randn(size = (self.Batch_size, self.Noise_size))
+        gen_categories = torch.randint(low = 0, high = 10, size = (self.Batch_size,))
+        if self.use_cuda:
+            noise = noise.cuda()
+            gen_categories = gen_categories.cuda()
+        inp = self.Generator(noise, gen_categories)
+        output = self.Discriminator(inp, gen_categories)  
+
+        label = torch.full(size = (self.Batch_size, 1), fill_value = self.real_label)
+        if self.use_cuda:
+            label = label.cuda()
+        gen_loss = self.loss(output, label)
+        gen_loss.backward()
+        self.opt_gen.step()
+
         #### train Discriminator ---------------------------------------
         self.opt_disc.zero_grad()
         # train with true pictures --------------
@@ -75,13 +93,8 @@ class CGAN:
         #train with generated pictures -----------
         #generate input from Generator
         # noise is taken from N(0,1) distribution
-        noise = torch.randn(size = (self.Batch_size, self.Noise_size))
-        gen_categories = torch.randint(low = 0, high = 10, size = (self.Batch_size,))
-        if self.use_cuda:
-            noise = noise.cuda()
-            gen_categories = gen_categories.cuda()
-        inp = self.Generator(noise, gen_categories)
-        
+        #we don't calculate noise and gen_categories twice, inp stays the same
+
         output = self.Discriminator(inp.detach(), gen_categories)
         label = torch.full(size = (self.Batch_size, 1), fill_value = self.false_label)
         if self.use_cuda:
@@ -90,22 +103,8 @@ class CGAN:
         
         disc_loss = 0.5 * (disc_loss_false + disc_loss_real)
         disc_loss.backward()
-
-        #### train Generator ---------------------------------------
-        #we don't calculate noise and gen_categories twice, inp stays the same
-        # we updated Disc so we calculate it again
-        self.opt_gen.zero_grad()
-        #inp = self.Generator(noise, gen_categories)
-        output = self.Discriminator(inp, gen_categories)  
-
-        label = torch.full(size = (self.Batch_size, 1), fill_value = self.real_label)
-        if self.use_cuda:
-            label = label.cuda()
-        gen_loss = self.loss(output, label)
-        gen_loss.backward()
-
         self.opt_disc.step()
-        self.opt_gen.step()
+
         return disc_loss_real.item(), disc_loss_false.item(), gen_loss.item()
     
     def save_model(self, model, name, epoch):
