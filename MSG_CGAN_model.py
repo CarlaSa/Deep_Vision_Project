@@ -30,6 +30,8 @@ class MSG_CGAN:
 
         self.Batch_size = Batch_size
         self.Noise_size = Noise_size
+        self.Label_size = Label_size
+        
         self.Generator = Generator(Noise_size, Label_size, Channel_size, Picture_size)
         self.Discriminator = Discriminator(Label_size, Channel_size, Picture_size)
         if weights_Generator is not None:
