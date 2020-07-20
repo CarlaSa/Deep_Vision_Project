@@ -69,7 +69,7 @@ class MSG_CGAN:
             categories = categories.cuda()
 
         ### Train Discriminator
-        opt_disc.zero_grad()
+        self.opt_disc.zero_grad()
         # train with true pictures ---------------
         
         images = self.get_downscaled(images)
@@ -102,7 +102,7 @@ class MSG_CGAN:
         self.opt_disc.step() 
         
         ### train Generator
-        opt_gen.zero_grad()
+        self.opt_gen.zero_grad()
         #we don't calculate noise and gen_categories twice, inp stays the same
         # we updated Disc so we calculate it again
         output = Disc(*inputs[::-1], gen_categories)
