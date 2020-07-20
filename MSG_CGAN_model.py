@@ -73,7 +73,7 @@ class MSG_CGAN:
         # train with true pictures ---------------
         
         images = self.get_downscaled(images)
-        output = self.Discriminator(*images, category)
+        output = self.Discriminator(*images, categories)
         
         label = torch.full(size = (self.Batch_size,1), fill_value = self.real_label * (1- self.smoothness))
         if self.use_cuda:
