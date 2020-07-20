@@ -31,7 +31,7 @@ class MSG_CGAN:
         self.Batch_size = Batch_size
         self.Noise_size = Noise_size
         self.Label_size = Label_size
-        
+
         self.Generator = Generator(Noise_size, Label_size, Channel_size, Picture_size)
         self.Discriminator = Discriminator(Label_size, Channel_size, Picture_size)
         if weights_Generator is not None:
@@ -95,7 +95,7 @@ class MSG_CGAN:
             label = label.cuda()
         inputs = self.Generator(noise, gen_categories)
         inp = [i.detach() for i in inputs][::-1]
-        output = Disc(*inp, gen_categories)
+        output = self.Discriminator(*inp, gen_categories)
         disc_loss_false = self.loss(output, label)
 
         disc_loss = (1/2) * (disc_loss_false + disc_loss_real)
@@ -107,7 +107,7 @@ class MSG_CGAN:
         self.opt_gen.zero_grad()
         #we don't calculate noise and gen_categories twice, inp stays the same
         # we updated Disc so we calculate it again
-        output = Disc(*inputs[::-1], gen_categories)
+        output = self.Discriminator(*inputs[::-1], gen_categories)
         
         label = torch.full(size = (BATCH_SIZE, 1), fill_value = self.real_label)
         label = label.cuda()
