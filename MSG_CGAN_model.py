@@ -109,7 +109,7 @@ class MSG_CGAN:
         # we updated Disc so we calculate it again
         output = self.Discriminator(*inputs[::-1], gen_categories)
         
-        label = torch.full(size = (BATCH_SIZE, 1), fill_value = self.real_label)
+        label = torch.full(size = (self.Batch_size, 1), fill_value = self.real_label)
         label = label.cuda()
         # we calculate the difference to the real label
         
