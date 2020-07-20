@@ -57,6 +57,11 @@ class MSG_CGAN:
                'dog','frog','horse','ship','truck']
     
     def get_downscaled(image):
+        out1 = image
+        out2 = torch.nn.functional.interpolate(image, size = (16,16))
+        out3 = torch.nn.functional.interpolate(image, size = (8,8))
+        out4 = torch.nn.functional.interpolate(image, size = (4,4))
+        return out1, out2, out3, out4
 
     def train_step(self, images, categories):
         if self.use_cuda:    
