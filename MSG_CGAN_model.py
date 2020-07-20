@@ -56,7 +56,7 @@ class MSG_CGAN:
         self.class_names  = ['airplane','automobile','bird','cat','deer',
                'dog','frog','horse','ship','truck']
     
-    def get_downscaled(image):
+    def get_downscaled(self, image):
         out1 = image
         out2 = torch.nn.functional.interpolate(image, size = (16,16))
         out3 = torch.nn.functional.interpolate(image, size = (8,8))
