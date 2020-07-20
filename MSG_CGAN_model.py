@@ -133,7 +133,6 @@ class MSG_CGAN:
                 gen_loss_list[epoch].append(gen_loss)
                 disc_loss_real_list[epoch].append(disc_loss_real)
                 disc_loss_fake_list[epoch].append(disc_loss_fake)
-                break
             
             
             if epoch % feedback_freq == 0 or epoch == num_epochs - 1 : 
@@ -142,7 +141,7 @@ class MSG_CGAN:
                 
                 #example picture
                 inp, cat = self.generate_example(2)
-                for index, ii in enumerate(inp[::-1]):
+                for index, ii in enumerate(inp):
                     if self.use_cuda:
                         ii = ii.cpu()
                     Img = F.to_pil_image(ii[0])
