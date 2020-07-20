@@ -13,7 +13,7 @@ import torchvision.transforms.functional as F
 from tqdm.auto import tqdm
 
 
-class MSG-CGAN:
+class MSG_CGAN:
     """
     The Generator gets an input of (Noise_size) of Noise 
     and a Label (in one-hot encoding), and generates a picture of shape
