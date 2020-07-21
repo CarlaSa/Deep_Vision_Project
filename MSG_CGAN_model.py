@@ -123,11 +123,11 @@ class MSG_CGAN:
     def save_model(self, model, name, epoch):
         torch.save(model.state_dict(), f'./weights/{name}_e{epoch}.ckpt')
 
-    def train(self, num_epochs, dataloader, feedback_freq = 5, save_freq = 10):
+    def train(self, num_epochs, dataloader, already_trained_epochs = 0, feedback_freq = 5, save_freq = 10):
         gen_loss_list = [list() for i in range(num_epochs)]
         disc_loss_real_list = [list() for i in range(num_epochs)]
         disc_loss_fake_list = [list() for i in range(num_epochs)]
-        for epoch in tqdm(range(num_epochs)):
+        for epoch in tqdm(range(already_trained_epochs, num_epochs)):
             for images, categories in tqdm(dataloader):
                 disc_loss_real, disc_loss_fake, gen_loss = self.train_step(images, categories)
                 gen_loss_list[epoch].append(gen_loss)
