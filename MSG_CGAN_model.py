@@ -26,8 +26,8 @@ class MSG_CGAN:
     """
     def __init__(self, Noise_size, Label_size, Channel_size, Picture_size, Batch_size,\
                 epochs_trained = 0, lr = 0.0002 , use_cuda = False, weights_Generator = None, \
-                weights_Discriminator = None, smoothness = 0.1):
-
+                weights_Discriminator = None, smoothness = 0.1, spec = "", lr_gen = None, lr_disc = None):
+        self.spec = spec
         self.Batch_size = Batch_size
         self.Noise_size = Noise_size
         self.Label_size = Label_size
@@ -44,10 +44,15 @@ class MSG_CGAN:
             self.Generator = self.Generator.cuda()
             self.Discriminator = self.Discriminator.cuda()
 
+        if lr_gen is None:
+            lr_gen = lr
+        if lr_disc is None:
+            lr_disc = lr
+            
         self.opt_gen = torch.optim.Adam(self.Generator.parameters(), \
-                lr = lr, betas = (0.5, 0.999))
+                lr = lr_gen, betas = (0.5, 0.999))
         self.opt_disc =torch.optim.Adam(self.Discriminator.parameters(), \
-                lr = lr, betas = (0.5, 0.999))
+                lr = lr_disc, betas = (0.5, 0.999))
         self.loss = torch.nn.BCELoss()
 
         self.real_label = 1
@@ -121,7 +126,7 @@ class MSG_CGAN:
 
     
     def save_model(self, model, name, epoch):
-        torch.save(model.state_dict(), f'./weights/{name}_e{epoch}.ckpt')
+        torch.save(model.state_dict(), f'./weights/{self.spec}{name}_e{epoch}.ckpt')
 
     def train(self, num_epochs, dataloader, already_trained_epochs = 0, feedback_freq = 5, save_freq = 10):
         gen_loss_list = [list() for i in range(num_epochs)]
