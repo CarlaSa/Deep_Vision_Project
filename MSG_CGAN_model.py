@@ -35,10 +35,10 @@ class MSG_CGAN:
         self.Generator = Generator(Noise_size, Label_size, Channel_size, Picture_size)
         self.Discriminator = Discriminator(Label_size, Channel_size, Picture_size)
         if weights_Generator is not None:
-            self.Generator = self.Generator.load_state_dict(torch.load(weights_Generator, \
+            self.Generator.load_state_dict(torch.load(weights_Generator, \
                                                         map_location=torch.device('cpu')))
         if weights_Discriminator is not None:
-            self.Discriminator = self.Discriminator.load_state_dict(torch.load(weights_Discriminator, \
+            self.Discriminator.load_state_dict(torch.load(weights_Discriminator, \
                                                         map_location=torch.device('cpu')))
         if use_cuda:
             self.Generator = self.Generator.cuda()
