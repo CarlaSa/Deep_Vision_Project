@@ -48,7 +48,7 @@ class MSG_CGAN:
             lr_gen = lr
         if lr_disc is None:
             lr_disc = lr
-            
+
         self.opt_gen = torch.optim.Adam(self.Generator.parameters(), \
                 lr = lr_gen, betas = (0.5, 0.999))
         self.opt_disc =torch.optim.Adam(self.Discriminator.parameters(), \
@@ -115,7 +115,8 @@ class MSG_CGAN:
         output = self.Discriminator(*inputs[::-1], gen_categories)
         
         label = torch.full(size = (self.Batch_size, 1), fill_value = self.real_label)
-        label = label.cuda()
+        if use_cuda:
+            label = label.cuda()
         # we calculate the difference to the real label
         
         gen_loss = self.loss(output, label)
