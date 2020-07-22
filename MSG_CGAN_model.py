@@ -178,6 +178,13 @@ class MSG_CGAN:
         inp = self.Generator(noise, gen_categories) 
         return inp , gen_categories
 
+    def generate_example_nr(self, noise, categorie):
+        if self.use_cuda:
+            noise = noise.cuda()
+            categorie = categorie.cuda()
+        inp = self.Generator(noise, categorie) 
+        return inp
+
 
 
 

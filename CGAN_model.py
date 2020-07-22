@@ -13,8 +13,6 @@ import torchvision.transforms.functional as F
 from tqdm.auto import tqdm
 
 
-torch.autograd.set_detect_anomaly(True)
-
 class CGAN:
     """
     The Generator gets an input of (Noise_size) of Noise 
@@ -34,10 +32,10 @@ class CGAN:
         self.Generator = Generator(Noise_size, Label_size, Channel_size, Picture_size)
         self.Discriminator = Discriminator(Label_size, Channel_size, Picture_size)
         if weights_Generator is not None:
-            self.Generator = Generator.load_state_dict(torch.load(weights_Generator, \
+            self.Generator.load_state_dict(torch.load(weights_Generator, \
                                                         map_location=torch.device('cpu')))
         if weights_Discriminator is not None:
-            self.Discriminator = Discriminator.load_state_dict(torch.load(weights_Discriminator, \
+            self.Discriminator.load_state_dict(torch.load(weights_Discriminator, \
                                                         map_location=torch.device('cpu')))
         if use_cuda:
             self.Generator = self.Generator.cuda()
@@ -158,7 +156,12 @@ class CGAN:
         inp = self.Generator(noise, gen_categories) 
         return inp , gen_categories
 
-
+    def generate_example_nr(self, noise, categorie):
+        if self.use_cuda:
+            noise = noise.cuda()
+            categorie = categorie.cuda()
+        inp = self.Generator(noise, categorie) 
+        return inp
 
 
 
