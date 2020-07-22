@@ -115,7 +115,7 @@ class MSG_CGAN:
         output = self.Discriminator(*inputs[::-1], gen_categories)
         
         label = torch.full(size = (self.Batch_size, 1), fill_value = self.real_label)
-        if use_cuda:
+        if self.use_cuda:
             label = label.cuda()
         # we calculate the difference to the real label
         
